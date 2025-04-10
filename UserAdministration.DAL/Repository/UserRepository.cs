@@ -14,6 +14,7 @@ namespace UserAdministration.DAL.Repository
         public async Task AddUser(User user)
         {
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
         }
@@ -40,8 +41,6 @@ namespace UserAdministration.DAL.Repository
 
         public async Task<User?> GetByCredentials(string email, string password)
         {
-            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
-
             var user = await _context.Users.Where(user => user.Email == email).FirstOrDefaultAsync();
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
