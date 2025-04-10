@@ -1,0 +1,44 @@
+﻿@model IEnumerable<UserAdministration.Application.Models.History.HistoryViewDTO>
+
+@{
+    ViewData["Title"] = "History";
+}
+
+<h1>History</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Timestamp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Browser)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.Timestamp)
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Browser)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
