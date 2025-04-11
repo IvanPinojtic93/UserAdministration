@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using UserAdministration;
 using UserAdministration.Application.Services;
 using UserAdministration.DAL.Models;
 using UserAdministration.DAL.Repository;
@@ -8,14 +9,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDbContext<UserAdministrationContext>(opt =>
-opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+builder.Services.AddDbContext<UserAdministrationContext>(option =>
+    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IHistoryService, HistoryService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IHistoryRepository, HistoryRepository>();
+
+builder.Services.AddMvc(
+       option => option.AddStringTrimModelBinderProvider()
+);
 
 var app = builder.Build();
 
