@@ -13,6 +13,8 @@ namespace UserAdministration.DAL.Repository
 
         public async Task AddUser(User user)
         {
+            await CheckValidEmail(user);
+
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
 
             _context.Users.Add(user);
@@ -32,6 +34,8 @@ namespace UserAdministration.DAL.Repository
 
         public async Task EditUser(User user)
         {
+            await CheckValidEmail(user);
+
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
 
             _context.Update(user);
@@ -39,13 +43,23 @@ namespace UserAdministration.DAL.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task<User?> GetByCredentials(string email, string password)
+        private async Task CheckValidEmail(User user)
         {
-            var user = await _context.Users.Where(user => user.Email == email).FirstOrDefaultAsync();
+            var existingUser = await GetByEmail(user.Email);
+
+            if (existingUser != null && user.Id != existingUser.Id)
+            {
+                throw new Exception("User with this email address already exists.");
+            }
+        }
+
+        public async Task<User> GetByCredentials(string email, string password)
+        {
+            var user = await GetByEmail(email);
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
-                return null;
+                throw new Exception("Invalid credentials.");
             }
 
             return user;
@@ -67,6 +81,11 @@ namespace UserAdministration.DAL.Repository
 
             _context.Entry(user).Property(u => u.LoginCount).IsModified = true;
             await _context.SaveChangesAsync();
+        }
+
+        private async Task<User?> GetByEmail(string email)
+        {
+            return await _context.Users.Where(user => user.Email == email).FirstOrDefaultAsync();
         }
     }
 }

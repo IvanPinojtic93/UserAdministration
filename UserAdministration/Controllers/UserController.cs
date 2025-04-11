@@ -36,11 +36,18 @@ namespace UserAdministration.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(UserEditDTO user)
         {
-            if (ModelState.IsValid)
+            try
             {
-                await _userService.AddUser(user);
+                if (ModelState.IsValid)
+                {
+                    await _userService.AddUser(user);
 
-                return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
             }
 
             return View(user);
@@ -49,7 +56,14 @@ namespace UserAdministration.Controllers
         // GET: UserController/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            return View(await _userService.GetUser(id));
+            var user = await _userService.GetUser(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
         }
 
         // POST: UserController/Edit/5
@@ -57,10 +71,18 @@ namespace UserAdministration.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, UserEditDTO user)
         {
-            if (ModelState.IsValid)
+            try
             {
-                await _userService.EditUser(id, user);
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    await _userService.EditUser(id, user);
+
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
             }
 
             return View(user);
@@ -69,7 +91,14 @@ namespace UserAdministration.Controllers
         // GET: UserController/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
-            return View(await _userService.GetUser(id));
+            var user = await _userService.GetUser(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
         }
 
         // POST: UserController/Delete/5
@@ -93,14 +122,21 @@ namespace UserAdministration.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(UserLoginDTO user)
         {
-            user.Browser = Request.Headers.UserAgent.ToString();
-
-            ModelState.ClearValidationState(nameof(user.Browser));
-
-            if (TryValidateModel(user, nameof(user.Browser)) && ModelState.IsValid)
+            try
             {
-                await _userService.LoginUser(user);
-                return RedirectToAction(nameof(Index));
+                user.Browser = Request.Headers.UserAgent.ToString();
+                ModelState.ClearValidationState(nameof(user.Browser));
+
+                if (TryValidateModel(user, nameof(user.Browser)) && ModelState.IsValid)
+                {
+                    await _userService.LoginUser(user);
+
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
             }
 
             return View(user);
