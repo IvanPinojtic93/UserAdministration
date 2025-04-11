@@ -47,9 +47,13 @@ namespace UserAdministration.DAL.Repository
         {
             var existingUser = await GetByEmail(user.Email);
 
-            if (existingUser != null && user.Id != existingUser.Id)
+            if (existingUser != null)
             {
-                throw new Exception("User with this email address already exists.");
+                if (user.Id != existingUser.Id)
+                {
+                    throw new Exception("User with this email address already exists.");
+                }
+                _context.Entry(existingUser).State = EntityState.Detached;
             }
         }
 

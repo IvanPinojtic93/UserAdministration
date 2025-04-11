@@ -1,10 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 
 namespace UserAdministration.DAL.Models
 {
-    public class UserAdministrationContext: DbContext
+    public class UserAdministrationContext : DbContext
     {
 
         public UserAdministrationContext(DbContextOptions<UserAdministrationContext> options)

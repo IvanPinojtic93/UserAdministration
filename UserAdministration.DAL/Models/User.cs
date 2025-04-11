@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace UserAdministration.DAL.Models
+﻿namespace UserAdministration.DAL.Models
 {
     public class User
     {

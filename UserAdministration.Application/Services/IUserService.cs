@@ -1,7 +1,4 @@
-﻿using System.Net;
-using System.Security.Cryptography;
-using UserAdministration.Application.Models.User;
-using UserAdministration.DAL.Models;
+﻿using UserAdministration.Application.Models.User;
 
 namespace UserAdministration.Application.Services
 {

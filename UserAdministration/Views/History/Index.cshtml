@@ -1,20 +1,13 @@
-﻿@model IEnumerable<UserAdministration.Application.Models.History.HistoryViewDTO>
+﻿<script src="~/js/history.js" asp-append-version="true"></script>
 
 @{
     ViewData["Title"] = "History";
 }
 
 <h1>History</h1>
-
-@{
-    if (!Model.Any())
-    {
-        <p>
-            No History found.
-        </p>
-    }
-    else
-    {
-        @await Html.PartialAsync("_HistoryTable", Model)
-    }
-}
+<div id="history">
+</div>
+<button class="btn btn-primary" onclick=renderView('@Url.Action("Login","User")',"#login")>Show login</button>
+<hr />
+<div id="login">
+</div>

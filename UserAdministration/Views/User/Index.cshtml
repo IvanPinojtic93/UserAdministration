@@ -1,27 +1,13 @@
-﻿@model IEnumerable<UserAdministration.Application.Models.User.UserViewDTO>
+﻿<script src="~/js/user.js" asp-append-version="true"></script>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Users";
 }
 
 <h1>Users</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-@{
-    if (!Model.Any())
-    {
-        <p>
-            No Users found.
-        </p>
-    }
-    else
-    {
-        @await Html.PartialAsync("_UserTable", Model)
-
-        <div>
-            <a asp-action="Login">Login</a>
-        </div>
-    }
-}
+<div id="users">
+</div>
+<button class="btn btn-primary" onclick=renderView('@Url.Action("Create")',"#userAction")>Add user</button>
+<hr />
+<div id="userAction">
+</div>

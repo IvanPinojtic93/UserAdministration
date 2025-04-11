@@ -1,11 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using UserAdministration.Application.Models;
 using UserAdministration.Application.Models.History;
 using UserAdministration.DAL.Models;
 using UserAdministration.DAL.Repository;

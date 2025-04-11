@@ -1,13 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol.Core.Types;
-using System.Globalization;
+﻿using Microsoft.AspNetCore.Mvc;
 using UserAdministration.Application.Models.User;
 using UserAdministration.Application.Services;
-using UserAdministration.DAL.Models;
 
 namespace UserAdministration.Controllers
 {
@@ -19,21 +12,26 @@ namespace UserAdministration.Controllers
         {
             _userService = userService;
         }
-        // GET: UserController
-        public async Task<IActionResult> Index()
+        // GET: User
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        // GET: User/UserTable
+        public async Task<IActionResult> UserTable()
         {
             return View(await _userService.GetUsers());
         }
 
-        // GET: UserController/Create
+        // GET: User/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: UserController/Create
+        // POST: User/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(UserEditDTO user)
         {
             try
@@ -42,7 +40,7 @@ namespace UserAdministration.Controllers
                 {
                     await _userService.AddUser(user);
 
-                    return RedirectToAction(nameof(Index));
+                    return Ok(new { message = "Success." });
                 }
             }
             catch (Exception ex)
@@ -53,7 +51,7 @@ namespace UserAdministration.Controllers
             return View(user);
         }
 
-        // GET: UserController/Edit/5
+        // GET: User/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
             var user = await _userService.GetUser(id);
@@ -63,12 +61,13 @@ namespace UserAdministration.Controllers
                 return NotFound();
             }
 
+            ViewBag.UserId = id;
+
             return View(user);
         }
 
-        // POST: UserController/Edit/5
+        // POST: User/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, UserEditDTO user)
         {
             try
@@ -77,7 +76,7 @@ namespace UserAdministration.Controllers
                 {
                     await _userService.EditUser(id, user);
 
-                    return RedirectToAction(nameof(Index));
+                    return Ok(new { message = "Success." });
                 }
             }
             catch (Exception ex)
@@ -85,41 +84,28 @@ namespace UserAdministration.Controllers
                 ModelState.AddModelError(string.Empty, ex.Message);
             }
 
+            ViewBag.UserId = id;
+
             return View(user);
         }
 
-        // GET: UserController/Delete/5
+        // DELETE: User/Delete/5
+        [HttpDelete]
         public async Task<IActionResult> Delete(int id)
-        {
-            var user = await _userService.GetUser(id);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return View(user);
-        }
-
-        // POST: UserController/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _userService.DeleteUser(id);
 
-            return RedirectToAction(nameof(Index));
+            return Ok(new { message = "Success." });
         }
 
-        // GET: UserController/Login
+        // GET: User/Login
         public IActionResult Login()
         {
             return View();
         }
 
-        // POST: UserController/Login
+        // POST: User/Login
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(UserLoginDTO user)
         {
             try
@@ -131,7 +117,8 @@ namespace UserAdministration.Controllers
                 {
                     await _userService.LoginUser(user);
 
-                    return RedirectToAction(nameof(Index));
+                    return Ok(new { message = "Success." });
+
                 }
             }
             catch (Exception ex)

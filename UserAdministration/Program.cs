@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using UserAdministration.Application.Services;
 using UserAdministration.DAL.Models;
 using UserAdministration.DAL.Repository;
